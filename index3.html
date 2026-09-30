@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INF5 TECHNOLOGY | Suporte, Manutenção e Licenças de Software</title>
+<meta name="description" content="Suporte de TI, manutenção de infraestrutura e gestão de licenças de software para empresas." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B3B6F;
+    --navy-dark:#072A52;
+    --navy-light:#1E5BA8;
+    --graphite:#2C3E50;
+    --gray-900:#1A2433;
+    --gray-700:#4A5568;
+    --gray-500:#718096;
+    --gray-300:#CBD5E0;
+    --gray-200:#E2E8F0;
+    --gray-100:#F5F7FA;
+    --white:#FFFFFF;
+    --gold:#B08D3F;
+    --green:#1F7A4D;
+    --radius:6px;
+    --shadow-sm:0 1px 3px rgba(11,59,111,.08);
+    --shadow-md:0 4px 14px rgba(11,59,111,.10);
+    --shadow-lg:0 12px 32px rgba(11,59,111,.12);
+    --border:#E2E8F0;
+    --header-h:72px;
+    --topbar-h:40px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--white);
+    color:var(--graphite);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Source Serif 4',Georgia,serif;color:var(--navy);line-height:1.25;font-weight:700;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .container{width:min(1180px,92%);margin-inline:auto}
+
+  /* ---------- TOPBAR + HEADER (fixos no topo) ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:var(--navy-dark);color:#D6E1F0;
+    font-size:.8rem;height:var(--topbar-h);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .topbar .container{display:flex;justify-content:space-between;align-items:center;height:100%;gap:16px;flex-wrap:wrap}
+  .topbar a{color:#D6E1F0;transition:color .2s}
+  .topbar a:hover{color:#fff}
+  .topbar-info{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+  .topbar-info span{display:inline-flex;align-items:center;gap:6px}
+  .topbar-info svg{width:14px;height:14px;fill:currentColor;opacity:.85}
+
+  header.main-header{
+    position:fixed;top:var(--topbar-h);left:0;right:0;z-index:999;
+    background:var(--white);
+    border-bottom:1px solid var(--border);
+    box-shadow:var(--shadow-sm);
+    height:var(--header-h);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:100%;gap:24px}
+  .logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
+  .logo-mark{
+    width:42px;height:42px;border-radius:6px;background:var(--navy);
+    display:grid;place-items:center;color:#fff;
+    font-family:'Source Serif 4',serif;font-weight:700;font-size:1.2rem;
+  }
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text b{font-family:'Source Serif 4',serif;font-size:1.15rem;color:var(--navy);font-weight:700}
+  .logo-text span{font-size:.68rem;color:var(--gray-500);letter-spacing:.16em;text-transform:uppercase;font-weight:500}
+  .menu{display:flex;gap:26px;font-size:.9rem;font-weight:500;color:var(--gray-700)}
+  .menu button{
+    background:none;border:none;font-family:inherit;font-size:inherit;color:inherit;
+    cursor:pointer;padding:6px 0;border-bottom:2px solid transparent;
+    transition:color .2s,border-color .2s;
+  }
+  .menu button:hover{color:var(--navy)}
+  .menu button.active{color:var(--navy);border-color:var(--navy)}
+  .nav-cta{display:flex;gap:12px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:var(--radius);
+    font-weight:600;font-size:.88rem;
+    border:1px solid transparent;cursor:pointer;
+    transition:background .2s,border-color .2s,color .2s,box-shadow .2s;
+    white-space:nowrap;font-family:inherit;
+  }
+  .btn-primary{background:var(--navy);color:#fff}
+  .btn-primary:hover{background:var(--navy-dark);box-shadow:var(--shadow-md)}
+  .btn-outline{background:transparent;color:var(--navy);border-color:var(--navy)}
+  .btn-outline:hover{background:var(--navy);color:#fff}
+  .btn-ghost{background:transparent;color:var(--gray-700);border-color:var(--border)}
+  .btn-ghost:hover{border-color:var(--navy);color:var(--navy)}
+  .btn-sm{padding:9px 16px;font-size:.84rem}
+  .hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--navy);font-size:1.5rem}
+
+  /* ---------- SLIDES ---------- */
+  .slides-viewport{
+    position:fixed;
+    top:calc(var(--topbar-h) + var(--header-h));
+    left:0;right:0;bottom:0;
+    overflow:hidden;
+  }
+  .slides-track{
+    display:flex;
+    height:100%;
+    width:100%;
+    transition:transform .7s cubic-bezier(.77,0,.18,1);
+    will-change:transform;
+  }
+  .slide{
+    flex:0 0 100%;
+    height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:70px 0 90px;
+    position:relative;
+    scrollbar-width:thin;
+    scrollbar-color:#CBD5E0 transparent;
+  }
+  .slide::-webkit-scrollbar{width:8px}
+  .slide::-webkit-scrollbar-thumb{background:#CBD5E0;border-radius:4px}
+  .slide::-webkit-scrollbar-track{background:transparent}
+
+  /* ---------- SETAS LATERAIS ---------- */
+  .arrow{
+    position:fixed;top:50%;transform:translateY(-50%);
+    z-index:900;
+    width:52px;height:52px;border-radius:50%;
+    background:var(--white);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow-md);
+    display:grid;place-items:center;
+    cursor:pointer;color:var(--navy);
+    transition:background .2s,color .2s,border-color .2s,transform .2s,box-shadow .2s;
+  }
+  .arrow:hover{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:var(--shadow-lg)}
+  .arrow:disabled{opacity:.25;cursor:not-allowed;pointer-events:none}
+  .arrow svg{width:22px;height:22px;fill:currentColor}
+  .arrow-prev{left:22px}
+  .arrow-next{right:22px}
+  .arrow-next::after{
+    content:"";position:absolute;inset:-6px;border-radius:50%;
+    border:1px dashed rgba(11,59,111,.25);
+    animation:spin 14s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ---------- PROGRESSO INFERIOR ---------- */
+  .progress-bar{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    z-index:900;
+    display:flex;align-items:center;gap:16px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:10px 20px;
+    box-shadow:var(--shadow-md);
+  }
+  .counter{
+    font-family:'Source Serif 4',serif;font-weight:700;
+    font-size:.86rem;color:var(--navy);
+    font-variant-numeric:tabular-nums;letter-spacing:.05em;
+    min-width:62px;text-align:center;
+  }
+  .dots{display:flex;gap:8px}
+  .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--gray-300);border:none;padding:0;cursor:pointer;
+    transition:background .25s,transform .25s;
+  }
+  .dot:hover{background:var(--gray-500)}
+  .dot.active{background:var(--navy);transform:scale(1.35)}
+
+  /* ---------- HINT "DESLIZE" ---------- */
+  .hint{
+    position:fixed;bottom:24px;right:88px;z-index:900;
+    display:flex;align-items:center;gap:10px;
+    background:var(--navy);color:#fff;
+    padding:10px 18px;border-radius:100px;
+    font-size:.78rem;font-weight:600;letter-spacing:.02em;
+    box-shadow:var(--shadow-md);
+    animation:bounceHint 2s ease-in-out infinite;
+    pointer-events:none;
+    transition:opacity .4s,transform .4s;
+  }
+  .hint.hidden{opacity:0;transform:translateX(20px)}
+  .hint svg{width:16px;height:16px;fill:currentColor}
+  @keyframes bounceHint{
+    0%,100%{transform:translateX(0)}
+    50%{transform:translateX(6px)}
+  }
+
+  /* ---------- CONTEÚDO (mesmo design corporativo) ---------- */
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 14px;border-radius:100px;
+    background:#EAF0F8;border:1px solid #C9D8EB;
+    font-size:.76rem;font-weight:600;color:var(--navy);
+    margin-bottom:24px;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--navy)}
+  .hero h1{font-size:clamp(1.7rem,3.4vw,2.6rem);margin-bottom:22px}
+  .hero p.sub{color:var(--gray-700);font-size:1rem;max-width:560px;margin-bottom:34px}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-visual{
+    background:var(--white);border:1px solid var(--border);
+    border-radius:8px;box-shadow:var(--shadow-lg);padding:32px;position:relative;
+  }
+  .hero-visual::before{
+    content:"";position:absolute;top:0;left:0;width:100%;height:4px;
+    background:var(--navy);border-radius:8px 8px 0 0;
+  }
+  .dashboard-title{
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--gray-500);font-weight:600;margin-bottom:18px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .live-dot{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-size:.7rem;font-weight:600;letter-spacing:.06em}
+  .live-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1.6s infinite}
+  @keyframes blink{50%{opacity:.35}}
+  .dash-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--gray-200);font-size:.88rem}
+  .dash-row:last-child{border-bottom:none;padding-bottom:0}
+  .dash-row .label{color:var(--gray-700)}
+  .dash-row .value{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+  .dash-row .value.ok{color:var(--green)}
+
+  .trust-label{text-align:center;font-size:.72rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:.18em;margin-bottom:26px;font-weight:600}
+  .logos{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;align-items:center}
+  .logos span{font-family:'Source Serif 4',serif;font-weight:600;font-size:1.05rem;color:var(--gray-500);transition:color .25s}
+  .logos span:hover{color:var(--navy)}
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border:1px solid var(--border);border-radius:8px;background:var(--white);overflow:hidden}
+  .metric{text-align:center;padding:30px 20px;border-right:1px solid var(--border)}
+  .metric:last-child{border-right:none}
+  .metric b{display:block;font-family:'Source Serif 4',serif;font-size:clamp(1.5rem,2.8vw,2rem);font-weight:700;color:var(--navy);line-height:1.1;margin-bottom:8px}
+  .metric span{font-size:.82rem;color:var(--gray-500)}
+
+  .section-head{text-align:center;max-width:720px;margin:0 auto 50px}
+  .section-head .eyebrow{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--navy-light);font-weight:700;margin-bottom:14px;display:block}
+  .section-head h2{font-size:clamp(1.5rem,2.8vw,2.1rem);margin-bottom:16px}
+  .section-head p{color:var(--gray-700);font-size:.96rem}
+  .divider{width:56px;height:3px;background:var(--gold);margin:20px auto 0}
+
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .card{
+    background:var(--white);border:1px solid var(--border);
+    border-radius:8px;padding:34px 28px;
+    transition:border-color .25s,box-shadow .25s,transform .25s;
+  }
+  .card:hover{border-color:var(--navy);box-shadow:var(--shadow-md);transform:translateY(-3px)}
+  .card-icon{width:50px;height:50px;border-radius:6px;background:#EAF0F8;border:1px solid #C9D8EB;display:grid;place-items:center;margin-bottom:22px;color:var(--navy)}
+  .card-icon svg{width:24px;height:24px;fill:currentColor}
+  .card h3{font-size:1.1rem;margin-bottom:12px}
+  .card > p{color:var(--gray-700);font-size:.9rem;margin-bottom:18px}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:9px;padding-top:16px;border-top:1px solid var(--gray-200)}
+  .card ul li{font-size:.86rem;color:var(--gray-700);display:flex;gap:10px;align-items:flex-start}
+  .card ul li::before{content:"";flex-shrink:0;width:6px;height:6px;border-radius:50%;background:var(--navy);margin-top:7px}
+
+  .process{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;counter-reset:step}
+  .step{padding:34px 28px;border-radius:8px;background:var(--white);border:1px solid var(--border)}
+  .step::before{
+    counter-increment:step;content:"0" counter(step);
+    font-family:'Source Serif 4',serif;font-weight:700;font-size:1.9rem;
+    color:var(--navy);display:block;margin-bottom:14px;
+    padding-bottom:14px;border-bottom:2px solid var(--gold);width:fit-content;
+  }
+  .step h3{font-size:1rem;margin-bottom:10px}
+  .step p{color:var(--gray-700);font-size:.88rem}
+
+  .diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .diff{display:flex;gap:18px;padding:26px;border-radius:8px;background:var(--white);border:1px solid var(--border);border-left:4px solid var(--navy)}
+  .diff .ico{flex-shrink:0;width:44px;height:44px;border-radius:6px;background:#EAF0F8;display:grid;place-items:center;color:var(--navy)}
+  .diff .ico svg{width:22px;height:22px;fill:currentColor}
+  .diff h4{font-size:.98rem;margin-bottom:6px;color:var(--navy)}
+  .diff p{color:var(--gray-700);font-size:.86rem;line-height:1.6}
+
+  .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .testi{padding:30px;border-radius:8px;background:var(--white);border:1px solid var(--border);display:flex;flex-direction:column;gap:18px;position:relative}
+  .testi::before{content:"“";font-family:'Source Serif 4',serif;position:absolute;top:10px;right:20px;font-size:3.6rem;line-height:1;color:#EAF0F8;font-weight:700}
+  .testi .quote{font-size:.92rem;color:var(--gray-700);line-height:1.7;position:relative;z-index:1}
+  .testi .kpi{display:inline-block;font-size:.72rem;font-weight:700;color:var(--navy);background:#EAF0F8;border:1px solid #C9D8EB;border-radius:4px;padding:5px 12px;width:fit-content;letter-spacing:.04em;text-transform:uppercase}
+  .testi .who{display:flex;align-items:center;gap:14px;margin-top:auto;padding-top:18px;border-top:1px solid var(--gray-200)}
+  .avatar{width:42px;height:42px;border-radius:50%;background:var(--navy);display:grid;place-items:center;font-weight:600;color:#fff;font-family:'Source Serif 4',serif;font-size:.9rem}
+  .who b{display:block;font-size:.88rem;color:var(--gray-900);font-family:'Inter',sans-serif;font-weight:600}
+  .who span{font-size:.76rem;color:var(--gray-500)}
+
+  .contact-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:50px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:48px;box-shadow:var(--shadow-md)}
+  .contact-info h2{font-size:clamp(1.4rem,2.4vw,1.8rem);margin-bottom:16px}
+  .contact-info > p{color:var(--gray-700);margin-bottom:28px;font-size:.92rem}
+  .contact-list{display:flex;flex-direction:column;gap:12px}
+  .contact-list a{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:6px;background:var(--gray-100);border:1px solid var(--border);transition:border-color .2s,background .2s}
+  .contact-list a:hover{border-color:var(--navy);background:#EAF0F8}
+  .contact-list .ic{width:40px;height:40px;border-radius:6px;flex-shrink:0;background:var(--white);border:1px solid var(--border);display:grid;place-items:center;color:var(--navy)}
+  .contact-list .ic svg{width:20px;height:20px;fill:currentColor}
+  .contact-list b{display:block;font-size:.88rem;color:var(--gray-900);font-weight:600}
+  .contact-list span{font-size:.78rem;color:var(--gray-500)}
+
+  form{display:flex;flex-direction:column;gap:16px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:.78rem;color:var(--gray-700);font-weight:600}
+  .field input,.field select,.field textarea{
+    background:var(--white);border:1px solid var(--gray-300);
+    border-radius:6px;padding:11px 14px;color:var(--gray-900);
+    font-family:inherit;font-size:.88rem;transition:border-color .2s,box-shadow .2s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,59,111,.12)}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  form .btn-primary{justify-content:center;padding:14px;font-size:.9rem;margin-top:4px}
+  form small{color:var(--gray-500);font-size:.74rem;text-align:center}
+
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:44px;margin-bottom:40px}
+  .foot-grid h4{font-family:'Inter',sans-serif;font-size:.76rem;text-transform:uppercase;letter-spacing:.14em;color:var(--navy);margin-bottom:18px;font-weight:700}
+  .foot-grid ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .foot-grid ul a{color:var(--gray-700);font-size:.86rem;transition:color .2s}
+  .foot-grid ul a:hover{color:var(--navy)}
+  .foot-brand p{color:var(--gray-700);font-size:.86rem;margin:16px 0;max-width:320px;line-height:1.65}
+  .seals{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .seal{font-size:.68rem;font-weight:600;padding:6px 11px;border-radius:4px;background:#EAF0F8;border:1px solid #C9D8EB;color:var(--navy);letter-spacing:.04em}
+  .foot-bottom{border-top:1px solid var(--gray-200);padding-top:24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.78rem;color:var(--gray-500)}
+  .foot-bottom a{color:var(--gray-700)}
+  .foot-bottom a:hover{color:var(--navy)}
+
+  /* ---------- RESPONSIVO ---------- */
+  @media(max-width:960px){
+    .hero-grid,.contact-wrap{grid-template-columns:1fr;gap:40px}
+    .services,.process,.diff-grid,.testimonials{grid-template-columns:1fr}
+    .metrics{grid-template-columns:1fr}
+    .metric{border-right:none;border-bottom:1px solid var(--border)}
+    .metric:last-child{border-bottom:none}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .contact-wrap{padding:30px 22px}
+    .slide{padding:50px 0 110px}
+    .arrow{width:44px;height:44px}
+    .arrow-prev{left:12px}
+    .arrow-next{right:12px}
+    .arrow svg{width:18px;height:18px}
+    .hint{display:none}
+  }
+  @media(max-width:720px){
+    .menu,.nav-cta .btn-ghost,.topbar-info span:nth-child(1){display:none}
+    .hamburger{display:block}
+    .field-row{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr;gap:32px}
+    .logo-text span{font-size:.6rem}
+    .logo-text b{font-size:1rem}
+    .arrow{width:40px;height:40px}
+    .progress-bar{padding:8px 14px;gap:10px;bottom:14px}
+    .counter{font-size:.78rem;min-width:54px}
+    .dot{width:6px;height:6px}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-info">
+      <span>
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        comercial@inf5tech.com.br
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></svg>
+        (11) 99999-9999
+      </span>
+    </div>
+    <div>
+      <a href="#">Portal do Cliente</a> · <a href="#">Abrir Chamado</a>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="main-header">
+  <div class="container nav">
+    <a href="#" class="logo" onclick="goTo(0);return false;">
+      <span class="logo-mark">
+        <img src="C:\Users\inf5t\Downloads\logo1.jpg" alt="Logo">
+      </span>
+      <span class="logo-text">
+        <b>INF5 TECHNOLOGY</b>
+        <span>TI Corporativa</span>
+      </span>
+    </a>
+    <nav class="menu" id="menu">
+      <button data-target="0" class="active">Início</button>
+      <button data-target="1">Serviços</button>
+      <button data-target="2">Processo</button>
+      <button data-target="3">Diferenciais</button>
+      <button data-target="4">Depoimentos</button>
+      <button data-target="5">Contato</button>
+    </nav>
+    <div class="nav-cta">
+      <a href="#contato" class="btn btn-ghost btn-sm" onclick="goTo(5);return false;">Abrir Chamado</a>
+      <a href="#contato" class="btn btn-primary btn-sm" onclick="goTo(5);return false;">Solicitar Orçamento</a>
+      <button class="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- HINT "DESLIZE" -->
+<div class="hint" id="hint">
+  Deslize para navegar
+  <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+</div>
+
+<!-- SETAS LATERAIS -->
+<button class="arrow arrow-prev" id="prevBtn" aria-label="Seção anterior" disabled>
+  <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+</button>
+<button class="arrow arrow-next" id="nextBtn" aria-label="Próxima seção">
+  <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+</button>
+
+<!-- PROGRESSO -->
+<div class="progress-bar">
+  <span class="counter" id="counter"></span>
+  <div class="dots" id="dots"></div>
+</div>
+
+<!-- SLIDES -->
+<div class="slides-viewport">
+  <div class="slides-track" id="track">
+
+    <!-- SLIDE 1: HERO + TRUST -->
+    <section class="slide" data-slide="0">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero">
+            <span class="badge">TI Gerenciada · SLA Garantido</span>
+            <h1>Estabilidade, segurança e o software certo para manter sua empresa em movimento.</h1>
+            <p class="sub">Suporte de TI preventivo, manutenção de infraestrutura e gestão completa de licenças de software para o seu negócio.</p>
+            <div class="hero-ctas">
+              <a href="#" class="btn btn-primary" onclick="goTo(5);return false;">Falar com um Especialista →</a>
+              <a href="#" class="btn btn-outline" onclick="goTo(1);return false;">Ver Nossos Serviços</a>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="dashboard-title">
+              Painel de Monitoramento
+              <span class="live-dot">Operacional</span>
+            </div>
+            <div class="dash-row"><span class="label">Servidores monitorados</span><span class="value">24 / 24</span></div>
+            <div class="dash-row"><span class="label">Backups sincronizados</span><span class="value ok">100%</span></div>
+            <div class="dash-row"><span class="label">Licenças regulares</span><span class="value ok">Conforme</span></div>
+            <div class="dash-row"><span class="label">Chamados em aberto</span><span class="value">3</span></div>
+            <div class="dash-row"><span class="label">Última verificação</span><span class="value">há 2 min</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:70px;padding-top:50px;border-top:1px solid var(--border)">
+          <p class="trust-label">Parceiros oficiais e tecnologias homologadas</p>
+          <div class="logos">
+            <span>Microsoft</span><span>Adobe</span><span>Kaspersky</span>
+            <span>AWS</span><span>Dell</span><span>Fortinet</span><span>Veeam</span>
+          </div>
+          <div class="metrics">
+            <div class="metric"><b>+12 mil</b><span>Chamados atendidos</span></div>
+            <div class="metric"><b>99,9%</b><span>Disponibilidade (SLA)</span></div>
+            <div class="metric"><b>&lt; 15 min</b><span>Tempo médio de resposta</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: SERVIÇOS -->
+    <section class="slide" data-slide="1">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Nossos Serviços</span>
+          <h2>Três pilares para uma operação de TI sem interrupções</h2>
+          <p>Cobrimos desde o atendimento ao usuário até a gestão estratégica de licenças — tudo com SLA e monitoramento contínuo.</p>
+          <div class="divider"></div>
+        </div>
+        <div class="services">
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
+            <h3>Suporte &amp; Helpdesk</h3>
+            <p>Atendimento técnico contínuo para usuários e infraestrutura.</p>
+            <ul>
+              <li>Suporte N1 / N2 / N3</li>
+              <li>Atendimento remoto e presencial</li>
+              <li>SLA garantido em contrato</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm0 10.99h7c-.5 4.1-3.4 7.8-7 8.9V12H5V6.3l7-3.1v8.8z"/></svg></div>
+            <h3>Manutenção Preventiva e Corretiva</h3>
+            <p>Cuidados com servidores, redes e hardware para evitar paradas.</p>
+            <ul>
+              <li>Monitoramento 24/7</li>
+              <li>Gestão de backups</li>
+              <li>Segurança de rede e servidores</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg></div>
+            <h3>Gestão e Venda de Licenças</h3>
+            <p>Venda, regularização e otimização de custos de software.</p>
+            <ul>
+              <li>Office 365, antivírus, ERPs</li>
+              <li>Auditoria e conformidade</li>
+              <li>Renovação automatizada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: PROCESSO -->
+    <section class="slide" data-slide="2">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Como Funciona</span>
+          <h2>Do diagnóstico à operação em três etapas</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="process">
+          <div class="step">
+            <h3>Diagnóstico Inicial</h3>
+            <p>Mapeamos as necessidades de hardware e software da sua empresa, identificando riscos e oportunidades de otimização.</p>
+          </div>
+          <div class="step">
+            <h3>Proposta Sob Medida</h3>
+            <p>Apresentamos o plano de suporte adequado e a otimização das licenças necessárias, com escopo e SLA claros.</p>
+          </div>
+          <div class="step">
+            <h3>Implantação &amp; Monitoramento</h3>
+            <p>Assumimos a gestão técnica e garantimos a segurança e o suporte contínuo aos seus colaboradores.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: DIFERENCIAIS -->
+    <section class="slide" data-slide="3">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Por que a INF5</span>
+          <h2>Diferenciais que se refletem na operação</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="diff-grid">
+          <div class="diff">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg></div>
+            <div><h4>Atendimento Humanizado e Ágil</h4><p>Sem filas infinitas de chamados para problemas urgentes. Priorizamos o que impacta sua operação.</p></div>
+          </div>
+          <div class="diff">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+            <div><h4>Redução de Custos</h4><p>Evite multas por software não licenciado e desperdício com licenças ociosas na sua empresa.</p></div>
+          </div>
+          <div class="diff">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+            <div><h4>Segurança e Conformidade</h4><p>Adequação a normas de proteção de dados e backups criptografados, em conformidade com a LGPD.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: DEPOIMENTOS -->
+    <section class="slide" data-slide="4">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Casos de Sucesso</span>
+          <h2>Resultados mensuráveis em clientes atendidos</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="testimonials">
+          <div class="testi">
+            <p class="quote">Reduzimos o tempo de inatividade da rede em 40% após a migração para o monitoramento 24/7 da INF5.</p>
+            <span class="kpi">−40% downtime</span>
+            <div class="who"><div class="avatar">RM</div><div><b>Ricardo M.</b><span>Diretor de TI · Grupo Vertex</span></div></div>
+          </div>
+          <div class="testi">
+            <p class="quote">A auditoria de licenças evitou uma multa pesada e ainda reduziu nosso custo anual com software.</p>
+            <span class="kpi">−28% custo anual</span>
+            <div class="who"><div class="avatar">CS</div><div><b>Camila S.</b><span>Gerente de Operações · LogiNorte</span></div></div>
+          </div>
+          <div class="testi">
+            <p class="quote">Suporte que responde em minutos, não em horas. Nossa equipe nunca ficou parada desde o início do contrato.</p>
+            <span class="kpi">&lt; 15 min resposta</span>
+            <div class="who"><div class="avatar">AP</div><div><b>André P.</b><span>CEO · Prime Contábil</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CONTATO -->
+    <section class="slide" data-slide="5">
+      <div class="container">
+        <div class="contact-wrap">
+          <div class="contact-info">
+            <h2>Solicite seu orçamento ou abra um chamado</h2>
+            <p>Preencha o formulário e nossa equipe comercial entrará em contato em até 2 horas úteis. Para emergências, use nossos canais diretos.</p>
+            <div class="contact-list">
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2s-.8 1-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3.1 5 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg></div>
+                <div><b>WhatsApp Comercial</b><span>(11) 99999-9999 · 24/7 para emergências</span></div>
+              </a>
+              <a href="mailto:comercial@inf5tech.com.br">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+                <div><b>comercial@inf5tech.com.br</b><span>Resposta em até 2h úteis</span></div>
+              </a>
+              <a href="#">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/></svg></div>
+                <div><b>São Paulo · SP</b><span>Atendimento remoto em todo o Brasil</span></div>
+              </a>
+            </div>
+          </div>
+          <form id="lead-form">
+            <div class="field-row">
+              <div class="field"><label for="nome">Nome*</label><input id="nome" required placeholder="Seu nome completo"></div>
+              <div class="field"><label for="email">E-mail corporativo*</label><input id="email" type="email" required placeholder="voce@empresa.com"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="tel">Telefone*</label><input id="tel" required placeholder="(11) 90000-0000"></div>
+              <div class="field"><label for="empresa">Empresa*</label><input id="empresa" required placeholder="Razão social ou nome fantasia"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="users">Nº de computadores/usuários</label><input id="users" placeholder="Ex.: 25"></div>
+              <div class="field">
+                <label for="servico">Serviço de interesse</label>
+                <select id="servico">
+                  <option>Suporte &amp; Helpdesk</option>
+                  <option>Manutenção Preventiva/Corretiva</option>
+                  <option>Licenciamento de Software</option>
+                  <option>Suporte + Licenciamento</option>
+                </select>
+              </div>
+            </div>
+            <div class="field"><label for="msg">Mensagem (opcional)</label><textarea id="msg" rows="3" placeholder="Descreva brevemente sua necessidade"></textarea></div>
+            <button type="submit" class="btn btn-primary">Enviar solicitação →</button>
+            <small>Seus dados são tratados em conformidade com a LGPD.</small>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: SOBRE -->
+    <section class="slide" data-slide="6">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Sobre Nós</span>
+          <h2>Especialistas em manter operações críticas em funcionamento</h2>
+          <div class="divider"></div>
+          <p style="margin-top:24px">A INF5 TECHNOLOGY atua há mais de uma década oferecendo suporte técnico, manutenção de infraestrutura e gestão de licenças de software para empresas de médio e grande porte. Nosso compromisso é com a continuidade do seu negócio.</p>
+        </div>
+        <div class="diff-grid" style="margin-top:50px">
+          <div class="diff">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <div><h4>Missão</h4><p>Garantir que a tecnologia seja um ativo estratégico, e não um problema operacional.</p></div>
+          </div>
+          <div class="diff">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></div>
+            <div><h4>Visão</h4><p>Ser referência regional em TI gerenciada, com atendimento humano e resultados mensuráveis.</p></div>
+          </div>
+          <div class="diff">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            <div><h4>Valores</h4><p>Transparência técnica, agilidade no atendimento, conformidade e parceria de longo prazo.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: BLOG -->
+    <section class="slide" data-slide="7">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Blog Técnico</span>
+          <h2>Conteúdo para decisores de TI</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="services">
+          <article class="card">
+            <span class="kpi" style="display:inline-block;font-size:.7rem;font-weight:700;color:var(--navy);background:#EAF0F8;border:1px solid #C9D8EB;border-radius:4px;padding:4px 10px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px">Licenciamento</span>
+            <h3>Auditoria de licenças: como evitar multas e reduzir custos</h3>
+            <p>Entenda o passo a passo de uma auditoria de software e por que ela pode reduzir até 30% do seu custo anual.</p>
+          </article>
+          <article class="card">
+            <span class="kpi" style="display:inline-block;font-size:.7rem;font-weight:700;color:var(--navy);background:#EAF0F8;border:1px solid #C9D8EB;border-radius:4px;padding:4px 10px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px">Infraestrutura</span>
+            <h3>Monitoramento 24/7: o que sua empresa deveria estar vendo</h3>
+            <p>Métricas essenciais de servidores, rede e backups que evitam paradas antes que elas aconteçam.</p>
+          </article>
+          <article class="card">
+            <span class="kpi" style="display:inline-block;font-size:.7rem;font-weight:700;color:var(--navy);background:#EAF0F8;border:1px solid #C9D8EB;border-radius:4px;padding:4px 10px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px">LGPD</span>
+            <h3>Conformidade com a LGPD: por onde começar</h3>
+            <p>Um guia prático para gestores que precisam adequar a operação de TI às exigências da lei.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: RODAPÉ / INSTITUCIONAL -->
+    <section class="slide" data-slide="8">
+      <div class="container">
+        <div class="foot-grid">
+          <div class="foot-brand">
+            <a href="#" class="logo" onclick="goTo(0);return false;">
+              <span class="logo-mark">5</span>
+              <span class="logo-text"><b>INF5 TECHNOLOGY</b><span>TI Corporativa</span></span>
+            </a>
+            <p>Suporte, manutenção e licenciamento de software para empresas que não podem parar.</p>
+            <div class="seals">
+              <span class="seal">Microsoft Partner</span>
+              <span class="seal">LGPD Ready</span>
+              <span class="seal">ISO 27001</span>
+            </div>
+          </div>
+          <div>
+            <h4>Serviços</h4>
+            <ul>
+              <li><a href="#" onclick="goTo(1);return false;">Suporte &amp; Helpdesk</a></li>
+              <li><a href="#" onclick="goTo(1);return false;">Manutenção</a></li>
+              <li><a href="#" onclick="goTo(1);return false;">Licenciamento</a></li>
+              <li><a href="#" onclick="goTo(1);return false;">Monitoramento 24/7</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Empresa</h4>
+            <ul>
+              <li><a href="#" onclick="goTo(6);return false;">Sobre Nós</a></li>
+              <li><a href="#" onclick="goTo(7);return false;">Blog Técnico</a></li>
+              <li><a href="#" onclick="goTo(5);return false;">Contato</a></li>
+              <li><a href="#">Trabalhe Conosco</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Cliente</h4>
+            <ul>
+              <li><a href="#">Portal do Chamado</a></li>
+              <li><a href="#">Área do Cliente</a></li>
+              <li><a href="#">Status dos Serviços</a></li>
+              <li><a href="#">Base de Conhecimento</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot-bottom">
+          <span>© 2025 INF5 TECHNOLOGY · CNPJ 00.000.000/0001-00</span>
+          <span><a href="#">Política de Privacidade</a> · <a href="#">Termos de Uso</a> · <a href="#">LGPD</a></span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- WHATSAPP FLUTUANTE -->
+<a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="whatsapp" aria-label="WhatsApp" style="position:fixed;bottom:24px;right:24px;z-index:1001;width:56px;height:56px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.2);transition:transform .2s">
+  <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#fff"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2s-.8 1-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3.1 5 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+</a>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('counter');
+  const dotsWrap = document.getElementById('dots');
+  const menuBtns = document.querySelectorAll('.menu button');
+  const hint = document.getElementById('hint');
+
+  let current = 0;
+  let locked = false;
+
+  // Criar bolinhas
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' active' : '');
+    b.setAttribute('aria-label', 'Ir para seção ' + (i + 1));
+    b.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(b);
+  });
+  const dots = dotsWrap.querySelectorAll('.dot');
+
+  function pad(n){ return n < 10 ? '0' + n : n; }
+
+  function goTo(index){
+    if(locked || index === current || index < 0 || index >= total) return;
+    locked = true;
+    current = index;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    updateUI();
+    setTimeout(() => { locked = false; }, 720);
+    // Reset scroll do slide novo
+    slides[current].scrollTop = 0;
+  }
+
+  function updateUI(){
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    counter.textContent = pad(current + 1) + ' / ' + pad(total);
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    menuBtns.forEach((b, i) => b.classList.toggle('active', i === current));
+    // Esconde hint após primeira navegação
+    if(current > 0) hint.classList.add('hidden');
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  menuBtns.forEach(btn => {
+    btn.addEventListener('click', () => goTo(parseInt(btn.dataset.target, 10)));
+  });
+
+  // Teclado
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+
+  // Roda do mouse (com debounce)
+  let wheelTimer = null;
+  let wheelAccum = 0;
+  const WHEEL_THRESHOLD = 60;
+
+  document.querySelector('.slides-viewport').addEventListener('wheel', (e) => {
+    const slide = slides[current];
+    const atTop = slide.scrollTop <= 0;
+    const atBottom = slide.scrollTop + slide.clientHeight >= slide.scrollHeight - 2;
+
+    // Se o slide interno ainda tem para onde rolar, deixa rolar
+    if((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)){
+      wheelAccum = 0;
+      return;
+    }
+
+    wheelAccum += e.deltaY;
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => { wheelAccum = 0; }, 200);
+
+    if(Math.abs(wheelAccum) > WHEEL_THRESHOLD){
+      e.preventDefault();
+      if(wheelAccum > 0) goTo(current + 1);
+      else goTo(current - 1);
+      wheelAccum = 0;
+    }
+  }, { passive: false });
+
+  // Swipe (mobile)
+  let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+
+    // Só considera swipe horizontal
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 700){
+      if(dx < 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, { passive: true });
+
+  // Form
+  document.getElementById('lead-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    const btn = this.querySelector('button[type=submit]');
+    const original = btn.textContent;
+    btn.textContent = '✓ Solicitação enviada';
+    btn.style.background = '#1F7A4D';
+    btn.style.borderColor = '#1F7A4D';
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      this.reset();
+    }, 2600);
+  });
+
+  // Init
+  updateUI();
+  window.addEventListener('resize', () => {
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${current * 100}%)`;
+    requestAnimationFrame(() => {
+      track.style.transition = '';
+    });
+  });
+</script>
+</body>
+</html>
